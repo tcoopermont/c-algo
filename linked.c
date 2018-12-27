@@ -11,6 +11,13 @@ struct ll{
 };
 void delL(struct ld * node,struct ll * aList){
     //todo: adjust the mid
+    //need to check if last element
+    if(aList->first == aList->last){
+        aList->first = NULL;
+        aList->last = NULL;
+	node->prev= NULL;
+	node->next = NULL;
+    }
     if(node == aList->first){
         printf("first\n");
 	node->next->prev = NULL;
@@ -63,6 +70,17 @@ void insertL(struct ld * node,struct ld * anchor,struct ll * aList){
     node->next->prev = node;
     anchor->next = node;
     
+}
+void pushL(struct ld * node,struct ll * aList){
+    //first element - should we make sure next,prev are null?
+    if(aList->last == NULL){
+	aList->first = node;
+	aList->last = node;
+        return;
+    }
+    node->prev = aList->last;
+    aList->last->next = node;
+    aList->last = node;
 }
 void reInit(struct ll * aList,struct ld * a,struct ld * b,struct ld * c,struct ld * d){
 
@@ -132,6 +150,12 @@ int main(void){
     puts("reverse");
     revL(&aList);
 
+    pushL(&d,&aList);
+
+    puts("forward");
+    forwL(&aList);
+    puts("reverse");
+    revL(&aList);
     puts("reInit");
     reInit(&aList,&a,&b,&c,&d);
     puts("forward");
