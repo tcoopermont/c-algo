@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 struct ld{
 	int data;
 	struct ld * prev;
@@ -122,6 +123,10 @@ int main(void){
     struct ld d;
     struct ll aList;
     struct ld * cur;
+
+    aList.first = NULL;
+    aList.last = NULL;
+
     a.data =1;
     //a.prev = NULL;
     //a.next = &b;
@@ -209,6 +214,24 @@ int main(void){
     delL(aList.first,&aList);
     delL(aList.first,&aList);
     delL(aList.first,&aList);
+    puts("forward");
+    forwL(&aList);
+    puts("reverse");
+    revL(&aList);
+
+    puts("\n***dynamic tests******");
+    aList.first = NULL;
+    aList.last= NULL;
+    int numSegs = 4;
+    struct ld *srcD;
+    struct ld *dstD;
+    srcD = (struct ld *) malloc (sizeof (struct ld) * numSegs);
+    dstD = (struct ld *) malloc (sizeof (struct ld) * numSegs);
+
+    for(i=0;i<4;i++){
+        (srcD + i)->data = i;
+        pushL(srcD + i,&aList);	
+    }
     puts("forward");
     forwL(&aList);
     puts("reverse");

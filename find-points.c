@@ -18,6 +18,8 @@ void getMax(void){
     int ct = 0; //count point matches
     int maxCt =0; //the running max matches
     int maxInx = 0; //the 0 - 101 with most matches
+    // ***** Error ****** should be Max segment length insead of NUM_SEGS
+    // Does it matter? Perhaps only the starting point needs to be checked at MAX_RANGE
     for(i=0;i<=(MAX_RANGE + NUM_SEGS - 2) ;i++){ //ex: max 100 length 20 =  modulus  99 + 19
 
 	ct = 0;
