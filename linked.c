@@ -17,6 +17,7 @@ void delL(struct ld * node,struct ll * aList){
         aList->last = NULL;
 	node->prev= NULL;
 	node->next = NULL;
+	return;
     }
     if(node == aList->first){
         printf("first\n");
@@ -76,14 +77,25 @@ void pushL(struct ld * node,struct ll * aList){
     if(aList->last == NULL){
 	aList->first = node;
 	aList->last = node;
+	node->prev = NULL;
+	node->next = NULL;
         return;
     }
     node->prev = aList->last;
+    node->next = NULL;
     aList->last->next = node;
     aList->last = node;
 }
 void reInit(struct ll * aList,struct ld * a,struct ld * b,struct ld * c,struct ld * d){
 
+    aList->first = NULL;
+    aList->last = NULL;
+    pushL(a,aList);
+    pushL(b,aList);
+    pushL(c,aList);
+    pushL(d,aList);
+
+    /*
     a->prev = NULL;
     a->next = b;
 
@@ -99,6 +111,7 @@ void reInit(struct ll * aList,struct ld * a,struct ld * b,struct ld * c,struct l
     aList->first = a;
     aList->last = d;
     aList->mid = b;
+    */
 }
 int main(void){
     int i,num,t;
@@ -109,33 +122,37 @@ int main(void){
     struct ld d;
     struct ll aList;
     struct ld * cur;
-
     a.data =1;
-    a.prev = NULL;
-    a.next = &b;
+    //a.prev = NULL;
+    //a.next = &b;
 
     b.data =2;
-    b.prev = &a;
-    b.next = &c;
+    //b.prev = &a;
+    //b.next = &c;
 
     c.data =3;
-    c.prev = &b;
-    c.next = &d;
+    //c.prev = &b;
+    //c.next = &d;
 
     d.data =4;
-    d.prev = &c;
-    d.next = NULL;
-
+    //d.prev = &c;
+    //d.next = NULL;
+/*
     aList.first = &a;
     aList.last = &d;
     aList.mid = &b;
-
+*/
+    pushL(&a,&aList);
+    pushL(&b,&aList);
+    pushL(&c,&aList);
+    pushL(&d,&aList);
     //printf("%d\n",b.data);
     puts("forward");
     forwL(&aList);
     puts("reverse");
     revL(&aList);
 
+    puts("delete a");
     delL(&a,&aList);
 
     puts("forward");
@@ -143,6 +160,7 @@ int main(void){
     puts("reverse");
     revL(&aList);
 
+    puts("delete b");
     delL(&d,&aList);
 
     puts("forward");
@@ -172,6 +190,25 @@ int main(void){
 
     insertL(&b,&a,&aList);
 
+    puts("forward");
+    forwL(&aList);
+    puts("reverse");
+    revL(&aList);
+
+    delL(aList.last,&aList);
+    delL(aList.last,&aList);
+    delL(aList.last,&aList);
+    delL(aList.last,&aList);
+    puts("forward");
+    forwL(&aList);
+    puts("reverse");
+    revL(&aList);
+
+    reInit(&aList,&a,&b,&c,&d);
+    delL(aList.first,&aList);
+    delL(aList.first,&aList);
+    delL(aList.first,&aList);
+    delL(aList.first,&aList);
     puts("forward");
     forwL(&aList);
     puts("reverse");
