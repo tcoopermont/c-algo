@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <time.h>
 
-#define NUM_SEGS 20
 #define MAX_RANGE 80 
 struct seg {
     int st;
@@ -10,9 +9,48 @@ struct seg {
     int l;
     int pt;
 };
-struct seg segs[NUM_SEGS];
-int unMatched = NUM_SEGS;
+struct ld{
+	struct seg * data;
+	struct ld * prev;
+	struct ld * next;
+};
+struct ll{
+	struct ld * first;
+	struct ld * mid;
+	struct ld * last;
+};
+//struct seg segs[NUM_SEGS];
+//int unMatched = NUM_SEGS;
 
+/* ************************
+ * Linked List Functions
+ */ 
+void pushL(struct ld * node,struct ll * aList){
+    //first element - should we make sure next,prev are null?
+    if(aList->last == NULL){
+	aList->first = node;
+	aList->last = node;
+	node->prev = NULL;
+	node->next = NULL;
+        return;
+    }
+    node->prev = aList->last;
+    node->next = NULL;
+    aList->last->next = node;
+    aList->last = node;
+}
+
+void forwL(struct ll * aList){
+    struct ld * cur;
+    cur = aList->first;
+    //for(i=0;i<4;i++){
+    while(cur != NULL){
+
+        printf("%d\n",cur->data->st);
+	cur = cur->next;
+    } 
+}
+/*
 int compareSegs(const void *a, const void *b){
     struct seg *sa = (struct seg *) a;
     struct seg *sb = (struct seg *) b;
@@ -47,26 +85,37 @@ void checkSeg(struct seg *a){
     }
     unMatched -= maxCt;
 }
+*/
 int main(void){
     int a,b,i,k;
-    srand(time(NULL));
-    for(i=0;i<NUM_SEGS;i++){
-	//a = rand()%MAX_RANGE;
-	//b = rand()%20;
+    int numSegs = 0;
+    //struct ld *srcD;
+    struct ld *segBoxes;
+    //struct ld *dstD;
+    struct ll segList;
+    scanf("%d",&numSegs);
+    segBoxes = (struct ld *) malloc (sizeof (struct ld) * numSegs);
+    //dstD = (struct ld *) malloc (sizeof (struct ld) * numSegs);
+    for(i=0;i<numSegs;i++){
 	scanf("%d %d",&a,&b);
     	//printf("%d-%d %d\n",a,b,b-a);
-	segs[i].st = a;
-	segs[i].end = b;
-	segs[i].l = b - a;
-	segs[i].pt = -1;
+        struct seg * node = (struct seg *) malloc (sizeof (struct seg));
+	node->st = a;
+	node->end = b;
+	node->l = b - a;
+	node->pt = -1;
+	(segBoxes + i)->data = node;
+	pushL(segBoxes + i,&segList);
     }
-    qsort(segs,NUM_SEGS,sizeof(struct seg),compareSegs);
+    forwL(&segList);
+    //qsort(segs,NUM_SEGS,sizeof(struct seg),compareSegs);
     //for(i=0;i<NUM_SEGS;i++){
     //    printf("%d-%d %d\n",segs[i].st,segs[i].end,segs[i].l);
     //}
     //printf("min: %d\n",segs[0].l);
     //printf("max: %d\n",segs[19].l);
 
+    /*
     printf("<!--\n") ;
     checkSeg(&segs[0]);
     while(unMatched > 0){
@@ -92,6 +141,7 @@ int main(void){
         printf("x1='%d' y1='%d' x2='%d' y2='%d'></line>\n",
 			segs[i].pt*10,0,segs[i].pt*10,500);
     }
+    */
     return 0;
 }
 
