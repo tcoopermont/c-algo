@@ -226,7 +226,7 @@ int main(void){
     struct ld *srcD;
     struct ld *dstD;
     srcD = (struct ld *) malloc (sizeof (struct ld) * numSegs);
-    dstD = (struct ld *) malloc (sizeof (struct ld) * numSegs);
+    //dstD = (struct ld *) malloc (sizeof (struct ld) * numSegs);
 
     for(i=0;i<4;i++){
         (srcD + i)->data = i;
@@ -236,5 +236,6 @@ int main(void){
     forwL(&aList);
     puts("reverse");
     revL(&aList);
+    free(srcD);
     return 0;
 }

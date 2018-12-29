@@ -91,21 +91,27 @@ int main(void){
     int numSegs = 0;
     //struct ld *srcD;
     struct ld *segBoxes;
+    struct seg *nodeBoxes;
     //struct ld *dstD;
     struct ll segList;
+    segList.first = NULL;
+    segList.last= NULL;
     scanf("%d",&numSegs);
     segBoxes = (struct ld *) malloc (sizeof (struct ld) * numSegs);
-    //dstD = (struct ld *) malloc (sizeof (struct ld) * numSegs);
+    nodeBoxes = (struct seg *) malloc (sizeof (struct ld) * numSegs);
     for(i=0;i<numSegs;i++){
-	scanf("%d %d",&a,&b);
-    	//printf("%d-%d %d\n",a,b,b-a);
-        struct seg * node = (struct seg *) malloc (sizeof (struct seg));
-	node->st = a;
-	node->end = b;
-	node->l = b - a;
-	node->pt = -1;
-	(segBoxes + i)->data = node;
-	pushL(segBoxes + i,&segList);
+        scanf("%d %d",&a,&b);
+        //printf("%d-%d %d\n",a,b,b-a);
+        //struct seg * node = (struct seg *) malloc (sizeof (struct seg));
+        struct seg * node = nodeBoxes + i;
+        node->st = a;
+        node->end = b;
+        node->l = b - a;
+        node->pt = -1;
+        (segBoxes + i)->data = node;
+        (segBoxes + i)->next = NULL;
+        (segBoxes + i)->prev = NULL;
+        pushL(segBoxes + i,&segList);
     }
     forwL(&segList);
     //qsort(segs,NUM_SEGS,sizeof(struct seg),compareSegs);
@@ -142,6 +148,8 @@ int main(void){
 			segs[i].pt*10,0,segs[i].pt*10,500);
     }
     */
+    free(segBoxes);
+    free(nodeBoxes);
     return 0;
 }
 
