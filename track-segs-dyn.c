@@ -132,6 +132,8 @@ void checkSeg(struct ld * node,struct ll * aList){
 	}
     }
     printf("inx:%d max:%d\n",maxInx,maxCt);
+    //return here with a point
+    //do this in main
     cur = aList->first;
     while(cur != NULL){
 	if(cur->data->st <= maxInx && cur->data->end >= maxInx){
@@ -210,10 +212,12 @@ int main(void){
     //checkSeg(&segs[0]);
     struct ld * cur;
     cur = segList.first;
+    //while first is not null
     while(cur != NULL){
-    	checkSeg(cur,&segList);
+    	point = checkSeg(cur,&segList);
         //printf("unMatched:%d\n",unMatched);
-	cur = cur->next;
+	//cur = cur->next;
+	//do the deletes here
     }
     /*
     for(i=0;i<NUM_SEGS;i++){
