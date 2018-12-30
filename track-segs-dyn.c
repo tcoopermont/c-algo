@@ -40,13 +40,66 @@ void pushL(struct ld * node,struct ll * aList){
     aList->last = node;
 }
 
+void insertL(struct ld * node,struct ld * anchor,struct ll * aList){
+    //insert after node - not handle last or first
+    //todo: check if anchor is last
+    node->prev = anchor;
+    node->next = anchor->next;
+    node->next->prev = node;
+    anchor->next = node;
+    
+}
+
+void shiftL(struct ld * node,struct ll * aList){
+    //assume there is an element already
+    node->prev = NULL; 
+    node->next = aList->first;
+    aList->first->prev = node;
+    aList->first = node;
+}
+
+void delL(struct ld * node,struct ll * aList){
+    //todo: adjust the mid
+    //need to check if last element
+    if(aList->first == aList->last){
+        aList->first = NULL;
+        aList->last = NULL;
+	node->prev= NULL;
+	node->next = NULL;
+	return;
+    }
+    if(node == aList->first){
+        printf("first\n");
+	node->next->prev = NULL;
+	aList->first = node->next;
+	//node->data = -1;
+	node->prev= NULL;
+	node->next = NULL;
+	return;
+    }
+    if(node == aList->last){
+        printf("last\n");
+	node->prev->next = NULL;
+	aList->last = node->prev;
+	//node->data = -1;
+	node->prev= NULL;
+	node->next = NULL;
+	return;
+    }
+	node->next->prev = node->prev;
+	node->prev->next = node->next;
+	node->prev= NULL;
+	node->next = NULL;
+
+}
+
 void forwL(struct ll * aList){
     struct ld * cur;
     cur = aList->first;
     //for(i=0;i<4;i++){
     while(cur != NULL){
 
-        printf("%d\n",cur->data->st);
+        printf("%d - %d\n",cur->data->st,cur->data->l);
 	cur = cur->next;
     } 
 }
@@ -57,35 +110,62 @@ int compareSegs(const void *a, const void *b){
     return sa->l - sb->l;
 }
 
-void checkSeg(struct seg *a){
+*/
+void checkSeg(struct ld * node,struct ll * aList){
     int i,k;
     int ct = 0; //count point matches
     int maxCt =0; //the running max matches
     int maxInx = 0; //the 0 - 101 with most matches
-    //printf("a: %d %d\n",a->st,a->end); 
-    for(i=a->st;i<=a->end;i++){
+    struct ld * cur;
+    for(i=node->data->st; i<=node->data->end ;i++){
 	ct = 0;
-    	for(k=0;k<NUM_SEGS;k++){
-	    if(segs[k].pt == -1 && segs[k].st <= i && segs[k].end >= i){
+        cur = aList->first;
+        while(cur != NULL){
+	    if(cur->data->st <= i && cur->data->end >= i){
 		ct++;		
 	    }
+	    cur = cur->next;
         }
 	if(ct > maxCt){
 	    maxCt = ct;
 	    maxInx = i;
 	}
-        
     }
     printf("inx:%d max:%d\n",maxInx,maxCt);
-    for(i=0;i<NUM_SEGS;i++){
-	if(segs[i].st <= maxInx && segs[i].end >= maxInx){
-	    segs[i].pt = maxInx;
+    cur = aList->first;
+    while(cur != NULL){
+	if(cur->data->st <= maxInx && cur->data->end >= maxInx){
+            struct ld * tagged = cur;
+	    delL(cur,aList); 
+	    //segs[i].pt = maxInx;
+	    cur = tagged->next;
+	}else{
+	    cur = cur->next;
 	}
-	
     }
-    unMatched -= maxCt;
+    //unMatched -= maxCt;
 }
-*/
+void insertSorted(struct ld * node,struct ll * aList) {
+    //printf("insert f:%d l:%d len:%d\n",aList->first->data->l,aList->last->data->l,node->data->l);
+    if(node->data->l < aList->first->data->l){
+        shiftL(node,aList);
+	return;
+    }
+    if(node->data->l > aList->last->data->l){
+        pushL(node,aList);
+	return;
+    }
+    struct ld * cur;
+    cur = aList->first;
+    while(cur != NULL){
+	if(cur->data->l > node->data->l){
+            printf("insert c:%d len:%d\n",cur->data->l,node->data->l);
+	    insertL(node,cur->prev,aList);
+	    break;
+	}
+	cur = cur->next;
+    } 
+}
 int main(void){
     int a,b,i,k;
     int numSegs = 0;
@@ -111,7 +191,12 @@ int main(void){
         (segBoxes + i)->data = node;
         (segBoxes + i)->next = NULL;
         (segBoxes + i)->prev = NULL;
-        pushL(segBoxes + i,&segList);
+	if(i == 0){
+	    puts("first elem");
+            pushL(segBoxes + i,&segList);
+	}else{
+            insertSorted(segBoxes + i,&segList);
+	}
     }
     forwL(&segList);
     //qsort(segs,NUM_SEGS,sizeof(struct seg),compareSegs);
@@ -121,18 +206,16 @@ int main(void){
     //printf("min: %d\n",segs[0].l);
     //printf("max: %d\n",segs[19].l);
 
-    /*
     printf("<!--\n") ;
-    checkSeg(&segs[0]);
-    while(unMatched > 0){
-        for(i=0;i<NUM_SEGS;i++){
-	    if(segs[i].pt == -1){
-                break;
-            }
-        }
-    	checkSeg(&segs[i]);
-        printf("unMatched:%d\n",unMatched);
+    //checkSeg(&segs[0]);
+    struct ld * cur;
+    cur = segList.first;
+    while(cur != NULL){
+    	checkSeg(cur,&segList);
+        //printf("unMatched:%d\n",unMatched);
+	cur = cur->next;
     }
+    /*
     for(i=0;i<NUM_SEGS;i++){
 	printf("%d-%d %d %d\n",segs[i].st,segs[i].end,segs[i].l,segs[i].pt);
     }
@@ -148,6 +231,7 @@ int main(void){
 			segs[i].pt*10,0,segs[i].pt*10,500);
     }
     */
+    //for valgrind
     free(segBoxes);
     free(nodeBoxes);
     return 0;

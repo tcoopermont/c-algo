@@ -87,6 +87,13 @@ void pushL(struct ld * node,struct ll * aList){
     aList->last->next = node;
     aList->last = node;
 }
+void shiftL(struct ld * node,struct ll * aList){
+    //assume there is an element already
+    node->prev = NULL; 
+    node->next = aList->first;
+    aList->first->prev = node;
+    aList->first = node;
+}
 void reInit(struct ll * aList,struct ld * a,struct ld * b,struct ld * c,struct ld * d){
 
     aList->first = NULL;
