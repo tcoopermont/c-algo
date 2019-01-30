@@ -7,6 +7,27 @@ void setOnes(char * head,int val){
   }
 }
 
+void genNext(char vals[],int maxPow,int skipPow){
+  //const
+  int powRoll[10] = {9,9*9,9*9*9,9^4,9^5,9^6,9^7,9^8,9^9,9^10};
+  static int runVals[10] = {1,1,1,1,1,1,1,1,1,1}; //incremented each call, rolled when equal to powRoll
+  //static int timesCalled = 0;
+  int i;
+  for(i=0;i<maxPow;i++){
+    //printf("pow: %d\n",powRoll[i]);
+    runVals[i]++;
+    if(runVals[i] > powRoll[i]){
+      runVals[i] = 1;
+      vals[i]++;
+    }
+  }
+  for(i=0;i<3;i++){
+    printf("runVals: %d %d\n",i,runVals[i]);
+  }
+
+  
+}
+
 int main(void){
   int a,j,i;
   int x,y;
@@ -17,7 +38,22 @@ int main(void){
   char * y2 = pflat + 18;
   char * yblock[9];
   char * pxy = ( char *) &xy[0][0];
+ 
+  char runDigs[3] = {1,1,1};
 
+  for(i=0; i<9; i++){
+    printf("\nloop: %d\n",i);
+    genNext(runDigs,3,0);
+    printf("vals: %d %d %d %d\n",i,runDigs[0],runDigs[1],runDigs[2]);
+  }
+
+  for(i=0; i<9; i++){
+    printf("\nloop: %d\n",i);
+    genNext(runDigs,3,0);
+    printf("vals: %d %d %d %d\n",i,runDigs[0],runDigs[1],runDigs[2]);
+  }
+
+  return 0;
   for(i=0; i<9; i++){
     yblock[i] = pflat + 9*i; 
   }
