@@ -11,30 +11,38 @@ void genNext(char vals[],int maxPow,int skipPow){
   //const
   int powRoll[10] = {9,9*9,9*9*9,9^4,9^5,9^6,9^7,9^8,9^9,9^10};
   static int runVals[10] = {0,0,0,0,0,0,0,0,0,0}; //incremented each call, rolled when equal to powRoll
+  static char hasRolled[10] = {0,0,0,0,0,0,0,0,0,0}; 
   //static int timesCalled = 0;
   int i;
-  /*
   for(i=0;i<maxPow;i++){
     //printf("pow: %d\n",powRoll[i]);
-    runVals[i]++;
-    if(runVals[i] > powRoll[i]){
-      runVals[i] = 1;
-      vals[i]++;
+    if(hasRolled[i]){
+      if(vals[i] < 9){
+        vals[i]++;
+      }else{
+        vals[i] = 1;
+      }
+      hasRolled[i] = 0;
+    }
+    if(runVals[i] < powRoll[i] - 1){
+      runVals[i]++;
+    }else{
+      runVals[i] = 0;
+      hasRolled[i] = 1;
     }
   }
-  */
-    //if(runVals[0] > powRoll[0]){
-    printf("runVals: %d\n",runVals[0]);
-
+    /*
+    if(hasRolled[0]){
+      vals[0]++;
+      hasRolled[0] = 0;
+    }
     if(runVals[0] < 9 - 1){
       runVals[0]++;
     }else{
       runVals[0] = 0;
-      vals[0]++;
+      hasRolled[0] = 1;
     }
-  //for(i=0;i<1;i++){
-    //printf("runVals: %d %d\n",,runVals[i]);
-  //}
+    */
 
   
 }
@@ -64,7 +72,22 @@ int pow2(){
   }
   return retVal;
 }
-    
+   //could start dig2 at 0 alternativly? 
+int pow2i(){
+  static int count = 0;
+  static int dig2 = 1;
+  static char beenInit = 0;
+  if (beenInit && count == 0){
+    dig2++;
+  }
+  if (count < 8) {
+    count++;
+  }else{
+    beenInit = 1;
+    count = 0;
+  }
+  return dig2;
+}
 
 int main(void){
   int a,j,i;
@@ -78,15 +101,16 @@ int main(void){
   char * pxy = ( char *) &xy[0][0];
  
   char runDigs[3] = {1,1,1};
-
-  for(j=0; j<3; j++){
+  i=1;
+  for(j=0; j<10; j++){
     for(i=1; i<=9; i++){
       //printf("\nloop: %d\n",i);
-      //genNext(runDigs,3,0);
-      printf("vals: %d - %d %d %d\n",i,runDigs[0],runDigs[1],runDigs[2]);
+      genNext(runDigs,3,0);
+      //printf("vals: %d - %d %d %d\n",i,runDigs[0],runDigs[1],runDigs[2]);
       //printf("%d - %d\n",i,zero2eight());
-      //printf("%d - %d\n",i,pow2());
+      //printf("%d - %d\n",i,pow2i());
     }
+    printf("vals: %d - %d %d %d\n",i,runDigs[0],runDigs[1],runDigs[2]);
   }
 /*
   for(i=0; i<9; i++){
