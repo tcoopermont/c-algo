@@ -10,7 +10,7 @@ void setOnes(char * head,int val){
 void genNext(char vals[],int maxPow,int skipPow){
   //const
   int powRoll[10] = {9,9*9,9*9*9,9^4,9^5,9^6,9^7,9^8,9^9,9^10};
-  static int runVals[10] = {1,0,0,0,0,0,0,0,0,0}; //incremented each call, rolled when equal to powRoll
+  static int runVals[10] = {0,0,0,0,0,0,0,0,0,0}; //incremented each call, rolled when equal to powRoll
   //static int timesCalled = 0;
   int i;
   /*
@@ -25,11 +25,12 @@ void genNext(char vals[],int maxPow,int skipPow){
   */
     //if(runVals[0] > powRoll[0]){
     printf("runVals: %d\n",runVals[0]);
-    if(runVals[0] >= 9){
-      runVals[0] = 1;
-      vals[0]++;
-    }else{
+
+    if(runVals[0] < 9 - 1){
       runVals[0]++;
+    }else{
+      runVals[0] = 0;
+      vals[0]++;
     }
   //for(i=0;i<1;i++){
     //printf("runVals: %d %d\n",,runVals[i]);
@@ -82,9 +83,9 @@ int main(void){
     for(i=1; i<=9; i++){
       //printf("\nloop: %d\n",i);
       //genNext(runDigs,3,0);
-      //printf("vals: %d - %d %d %d\n",i,runDigs[0],runDigs[1],runDigs[2]);
+      printf("vals: %d - %d %d %d\n",i,runDigs[0],runDigs[1],runDigs[2]);
       //printf("%d - %d\n",i,zero2eight());
-      printf("%d - %d\n",i,pow2());
+      //printf("%d - %d\n",i,pow2());
     }
   }
 /*
