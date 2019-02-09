@@ -5,8 +5,15 @@ t <- permutations(9,3,1:9,repeats.allowed=TRUE)
 dt <- data.frame(t)
 
 bl1_so0 <- function(dat,x,y,z){
+  #need to filter given digits
   filter(dat,X1 == x | X2 == y | X3 == z)
 
+}
+bl0_so1 <- function(dat,x,y,z){
+  g1 <- filter(dat,X1 == y | X1 == z)
+  g2 <- filter(dat,X2 == x | X2 == z)
+  g3 <- filter(dat,X3 == x | X3 == y)
+  unique(bind_rows(g1,g2,g3)) %>% arrange(X1,X2,X3)
 }
 
 noHits <- function(dat,x,y,z){
@@ -15,14 +22,18 @@ noHits <- function(dat,x,y,z){
 }
 
 bl1_so1 <- function(dat,x,y,z){
-  g1 <- filter(dat,(X1 == x & X2 == z & X3 != z) | (X1 == x & X3 == y & X2 != y)) 
-  g2 <- filter(dat,(X2 == y & X1 == z & X3 != z) | (X2 == y & X3 == x & X1 != x)) 
-  g3 <- filter(dat,(X3 == z & X1 == y & X2 != y) | (X3 == z & X2 == x & X1 != x)) 
+  g1 <- filter(dat,(X1 == x & X2 == z & X3 != z & X3 != y) | (X1 == x & X3 == y & X2 != y & X2 != z)) 
+  #g1 <- dat
+  g2 <- filter(dat,(X2 == y & X1 == z & X3 != z & X3 != x) | (X2 == y & X3 == x & X1 != x & X1 != z)) 
+  g3 <- filter(dat,(X3 == z & X1 == y & X2 != y & X2 != x) | (X3 == z & X2 == x & X1 != x & X1 != y)) 
 
   unique(bind_rows(g1,g2,g3)) %>% arrange(X1,X2,X3)
   
 }
 
+bl0_so2 <- function(dat,x,y,z){
+  
+}
 checkHits <- function(answer,guess){
 
   blinks <- 0
@@ -44,7 +55,7 @@ checkHits <- function(answer,guess){
 
 results <- data.frame(blinks = c(),solids = c())
 dt1 <- bl1_so1(dt,1,2,3)
-for (i in 1:45){
+for (i in 1:nrow(dt1)){
 	test <- checkHits(as.vector(dt1[i,]),c(1,2,3))
 	print(test)
 	results <- bind_rows(results,data.frame(blinks = c(test[1]),solids = c(test[2])))
