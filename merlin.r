@@ -31,11 +31,11 @@ checkHits <- function(answer,guess){
       blinks <- blinks + 1
     }
   }
-  sAnswer <- sort(answer)
-  sGuess <- sort(guess)
   solids <- 0
   for(i in 1:3){
-    if(sGuess[i] == sAnswer[i]){
+    matches <- which(answer == guess[i])
+    if(length(matches) > 0){
+      answer[matches[1]] <- NA
       solids <- solids + 1
     }
   }
@@ -49,6 +49,15 @@ for (i in 1:45){
 	print(test)
 	results <- bind_rows(results,data.frame(blinks = c(test[1]),solids = c(test[2])))
 }
+one23 <- bind_cols(dt1,results)
+
+resultsAll <- data.frame(blinks = c(),solids = c())
+for (i in 1:nrow(dt)){
+	test <- checkHits(as.vector(dt[i,]),c(1,2,3))
+	#print(test)
+	resultsAll <- bind_rows(resultsAll,data.frame(blinks = c(test[1]),solids = c(test[2])))
+}
+one23all <- bind_cols(dt,resultsAll)
 
 # one blinking
 #dt1 <- filter(dt,X1 == 1 | X2 == 2 | X3 == 3)
