@@ -94,7 +94,8 @@ int main(void){
   int x,y;
   char flat[81];
   char xy[9][9];
-  char xyz[9][9][9];
+  char xyzA[9][9][9];
+  char xyzB[9][9][9];
 
   char * pflat = &flat[0];
   char * y1 = pflat + 9;
@@ -108,7 +109,8 @@ int main(void){
   for(k=0; k<9; k++){
     for(j=0; j<9; j++){
       for(i=0; i<9; i++){
-        xyz[k][j][i] = (char)0;
+        xyzA[k][j][i] = (char)0;
+        xyzB[k][j][i] = (char)0;
       }
     }
   }
@@ -124,14 +126,26 @@ int main(void){
       //gen all 9*81
       //xyz[runDigs[1] -1][runDigs[0]-1][i-1] = 1;
       
+      //obj A
       //gen z==3
-      xyz[runDigs[0] -1][i-1][3-1] = 1;
+      xyzA[runDigs[0] -1][i-1][3-1] = 1;
 
       //gen y==2 
-      xyz[runDigs[0] -1][2-1][i-1] = 1;
+      xyzA[runDigs[0] -1][2-1][i-1] = 1;
 
       //gen x==1
-      xyz[1-1][runDigs[0] -1][i-1] = 1;
+      xyzA[1-1][runDigs[0] -1][i-1] = 1;
+
+
+      //obj B
+      //gen z==3
+      xyzA[runDigs[0] -1][i-1][3-1] = 1;
+
+      //gen y==2 
+      xyzA[runDigs[0] -1][2-1][i-1] = 1;
+
+      //gen x==1
+      xyzA[1-1][runDigs[0] -1][i-1] = 1;
     }
     //printf("vals: %d - %d %d %d\n",i,runDigs[0],runDigs[1],runDigs[2]);
   }
