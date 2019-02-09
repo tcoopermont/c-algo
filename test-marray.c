@@ -90,10 +90,12 @@ int pow2i(){
 }
 
 int main(void){
-  int a,j,i;
+  int a,j,i,k;
   int x,y;
   char flat[81];
   char xy[9][9];
+  char xyz[9][9][9];
+
   char * pflat = &flat[0];
   char * y1 = pflat + 9;
   char * y2 = pflat + 18;
@@ -101,16 +103,47 @@ int main(void){
   char * pxy = ( char *) &xy[0][0];
  
   char runDigs[3] = {1,1,1};
+
+
+  for(k=0; k<9; k++){
+    for(j=0; j<9; j++){
+      for(i=0; i<9; i++){
+        xyz[k][j][i] = (char)0;
+      }
+    }
+  }
   i=1;
-  for(j=0; j<10; j++){
+  for(j=0; j<9; j++){
     for(i=1; i<=9; i++){
       //printf("\nloop: %d\n",i);
       genNext(runDigs,3,0);
       //printf("vals: %d - %d %d %d\n",i,runDigs[0],runDigs[1],runDigs[2]);
       //printf("%d - %d\n",i,zero2eight());
       //printf("%d - %d\n",i,pow2i());
+
+      //gen all 9*81
+      //xyz[runDigs[1] -1][runDigs[0]-1][i-1] = 1;
+      
+      //gen z==3
+      xyz[runDigs[0] -1][i-1][3-1] = 1;
+
+      //gen y==2 
+      xyz[runDigs[0] -1][2-1][i-1] = 1;
+
+      //gen x==1
+      xyz[1-1][runDigs[0] -1][i-1] = 1;
     }
-    printf("vals: %d - %d %d %d\n",i,runDigs[0],runDigs[1],runDigs[2]);
+    //printf("vals: %d - %d %d %d\n",i,runDigs[0],runDigs[1],runDigs[2]);
+  }
+  puts("X1,X2,X3");
+  for(k=0; k<9; k++){
+    for(j=0; j<9; j++){
+      for(i=0; i<9; i++){
+        if(xyz[k][j][i] == 1){
+          printf("%d,%d,%d\n",k+1,j+1,i+1);
+	}
+      }
+    }
   }
 /*
   for(i=0; i<9; i++){
