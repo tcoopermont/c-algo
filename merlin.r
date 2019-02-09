@@ -22,11 +22,18 @@ dt1 <- filter(dt1,X1 == 4 | X2 == 5 | X3 == 6)
        1,3,1
        1,3,2 - no, would be two solid
        1,3,3 - no, three can't be last digit
+       .... all the other digits 4-9
  
     //these can be refined
     (X1 == 1 and X2 == 1 or 3 and X3 == 1 or 2) or
     (X2 == 2 and X1 == 2 or 3 and X3 == 1 or 2) or 
     (X3 == 3 and X1 == 2 or 3 and X2 == 1 or 3)
+
+    //
+    (X1 == 1 and X2 == 3 and X3 != 3 ) or
+    (X1 == 1 and X3 == 2 and X2 != 2) or
+    (X2 == 2 and X1 == 2 and X3 != 3 ) or 
+    (X2 == 2 and X3 == 1 and X1 != 1 ) or 
 can remove current position
 op <- c(7,8,9)
 
