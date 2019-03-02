@@ -3,7 +3,7 @@
 // bits 8,16,32
 #define NUM_SEGS 16 
 
-//1111-1111-1111-1111
+//b1111-1111-1111-1111
 void genBin(int aNum, char bNum[],int len){
 
     int digCheck,i,pos;
@@ -37,14 +37,21 @@ void testIt(int st, int end){
 
 int main(void){
     //testIt();
-    int i ;
-    char bNum[NUM_SEGS + 1];
+    int i,aNum ;
+    char bNum[NUM_SEGS + NUM_SEGS/4];
+    bNum[NUM_SEGS + NUM_SEGS/4 - 1 ] = '\0';
     puts("test: 0 - 8");
     testIt(0,8);
     puts("test: 32 - 40");
     testIt(32,40);
     puts("test: 65520 - 65535");
     testIt(65520,65535);
+    aNum = 0xff;
+    genBin(aNum, bNum,NUM_SEGS);
+    printf("aNum: %s\n",bNum);
+    aNum = ~7;
+    genBin(aNum, bNum,NUM_SEGS);
+    printf("aNum: %s\n",bNum);
     return 0;
 }
 
