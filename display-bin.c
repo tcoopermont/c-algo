@@ -7,8 +7,7 @@
 void genBin(int aNum, char bNum[],int len){
 
     int digCheck,i,pos;
-    int shift = len/4;
-    bNum[0] = 'b';
+    int shift = len/4 -1 ;
     for(i=len-1;i>=0;i--){
 	digCheck = 1 << (len - i - 1) ;
 	pos =  i + shift;
@@ -38,8 +37,17 @@ void testIt(int st, int end){
 int main(void){
     //testIt();
     int i,aNum ;
+    // 0-15 digit + 3 seperators + \0'
+    // for 16 bits, array of 20
     char bNum[NUM_SEGS + NUM_SEGS/4];
     bNum[NUM_SEGS + NUM_SEGS/4 - 1 ] = '\0';
+    for(i=0; i<19; i++){
+      bNum[i] = 48 + i;
+    }
+    for(i=0; i<20; i++){
+      printf("%d %c\n",i,bNum[i]);
+    }
+    printf("%s\n",bNum);
     puts("test: 0 - 8");
     testIt(0,8);
     puts("test: 32 - 40");
